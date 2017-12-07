@@ -1,0 +1,59 @@
+'%dir="C:\Users\k14162\Documents\Nowcasting FF y FV\FBK"
+%dir="C:\RAM\Bx\Nowcasting FF y FV\FBK"
+'%dirspc=%dir+"\SPCs"
+
+%path_input=%dir+"\FBK.xlsx"
+'%path_input=%dir+"\FBK_Hastanov16.xlsx"
+'%path_output=%dir+"\BC_AE"
+'%path_outputd16=%dir+"\BC_d16"
+
+'Fix the dates and read the iqy (data)
+wfcreate(page=mens) m 1993 2017
+import(type=excelxml) %path_input colhead=4, range="FBKmens!A1" namepos=first 
+
+'check desestacionalization de fbk mens y oyd...
+%path_spcmens=%dir+"\FBKmens.spc"
+genr  fbkmens_r3= @round(1000*fbkmens)/1000
+freeze(fbk_out) fbkmens_r3.x12(sfile={%path_spcmens},save=" d11  d12  d16",f)
+genr check_ae=fbkmens_r3_sa-fbkmens_ae
+'check desestacionalization de fbk oyd...
+pagecreate(page=trim) q 1993 2017
+import(type=excelxml) %path_input colhead=4, range="FBKtrim!A1" namepos=first 
+%path_spcoyd=%dir+"\FBKoyd.spc"
+freeze(fbk_out) fbkoyd.x12(sfile={%path_spcoyd},save=" d11  d12  d16",f)
+genr check_ae_OyD=fbkoyd_sa-fbkoyd_ae
+
+'stop
+
+
+'exec(c) "C:\RAM\Bx\Nowcasting FF y FV\FBK\gen_reportemens.prg"
+exec(c) "C:\RAM\Bx\Nowcasting FF y FV\FBK\gen_reportemens_forGivenGamma.prg"
+
+pageselect mens
+
+%dir="C:\RAM\Bx\Nowcasting FF y FV\FBK"
+%resultados=%dir+"\Sensibilidad FBK cifras noviembre2_Eviews_06.xlsx"
+group triomens fbkmens fbkmens_ae fbkmens_r3_d16
+pagesave(type=excelxml,mode=update) %resultados  range="Trio Mensual!a1" @keep triomens
+pageselect trim
+group triooyd fbkoyd fbkoyd_sa fbkoyd_d16
+pagesave(type=excelxml,mode=update) %resultados  range="Trio OyD!a1" @keep triooyd
+show output
+
+
+'exec(c) "C:\Users\k14162\Documents\Nowcasting FF y FV\FBK\gen_reportemens.prg"
+'%dir="C:\Users\k14162\Documents\Nowcasting FF y FV\FBK"
+
+
+
+
+'group bc_sa bc_?_sa
+'group bc_d16 bc_?_d16
+'wfsave(2,type=excelxml) %path_output @keep bc_sa
+'wfsave(2,type=excelxml) %path_outputd16 @keep bc_d16
+
+
+
+
+'exit
+
