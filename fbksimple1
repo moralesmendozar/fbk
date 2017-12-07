@@ -2,7 +2,7 @@
 %dir="C:\RAM\Bx\Nowcasting FF y FV\FBK"
 '%dirspc=%dir+"\SPCs"
 
-%path_input=%dir+"\FBK.xlsx"
+%path_input=%dir+"\FBK_marzo2017.xlsx"
 '%path_input=%dir+"\FBK_Hastanov16.xlsx"
 '%path_output=%dir+"\BC_AE"
 '%path_outputd16=%dir+"\BC_d16"
@@ -23,7 +23,7 @@ import(type=excelxml) %path_input colhead=4, range="FBKtrim!A1" namepos=first
 freeze(fbk_out) fbkoyd.x12(sfile={%path_spcoyd},save=" d11  d12  d16",f)
 genr check_ae_OyD=fbkoyd_sa-fbkoyd_ae
 
-'stop
+stop
 
 
 'exec(c) "C:\RAM\Bx\Nowcasting FF y FV\FBK\gen_reportemens.prg"
